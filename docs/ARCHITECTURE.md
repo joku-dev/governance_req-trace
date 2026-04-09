@@ -14,10 +14,12 @@ The tool follows a straightforward desktop/CLI batch-processing pattern:
 
 3. **Requirement extraction**
    - heuristic detection based on modal verbs and requirement phrasing
-   - classification into requirement strength categories
+   - scoring-based classification into `Policy`, `Control`, and `Guidance`
+   - confidence assignment (`High`, `Medium`, `Low`)
 
 4. **Cross-reference enrichment**
    - topic mapping based on keyword rules
+   - metadata enrichment for control family, owner role, and evidence mapping
    - linkage between requirements, excerpts, and topic groups
 
 5. **Workbook generation**

@@ -6,6 +6,8 @@ Cross-platform utility to extract requirement-like statements from selected Word
 - Multi-file selection dialog for `.docx` and `.doc`
 - CLI mode for headless execution on Linux/macOS/CI
 - Heuristic extraction of requirements using modal verbs such as `SHALL`, `MUST`, `SHALL NOT`, `MUST NOT`, `SHOULD`, and `MAY`
+- Stronger classification into `Policy`, `Control`, and `Guidance` with confidence scoring
+- Metadata enrichment for `Owner_Role`, `Control_Family`, and `Evidence_Mapping`
 - Output workbook with the following sheets:
   - `README`
   - `Requirements_Master`
@@ -90,5 +92,3 @@ This is a first-pass extractor, not a fully semantic compliance parser. Every ex
 - PDF support
 - direct write-back into an existing corporate workbook template
 - configurable taxonomy for `XREF_Group_ID`
-- stronger classification logic for policy vs. control vs. guidance
-- metadata enrichment for owners, control families, and evidence mappings

@@ -56,6 +56,113 @@ TOPIC_RULES = [
     ("Release & Deployment Control", ["release", "deploy", "promotion", "production", "approval"]),
 ]
 
+CONTROL_FAMILY_BY_TOPIC = {
+    "Traceability": "GOV-TRACE",
+    "Source Control & Change Integrity": "CM-CHANGE",
+    "Secure Coding": "APPSEC-SDLC",
+    "Dependencies, SBOM & Provenance": "SUPPLY-CHAIN",
+    "Build Automation & Reproducibility": "BUILD-CI",
+    "Testing & Verification": "QA-VERIFICATION",
+    "IAM, Access & Environment Security": "IAM-ACCESS",
+    "Secrets & Key Management": "CRYPTO-SECRETS",
+    "Vulnerability Management": "VULN-MGMT",
+    "Governance Roles & Accountability": "GOV-ROLES",
+    "Waivers, Deviations & Exceptions": "RISK-ACCEPTANCE",
+    "Logging, Monitoring & Auditability": "AUDIT-LOGGING",
+    "Release & Deployment Control": "RELEASE-DEPLOY",
+    "Unclassified": "UNMAPPED",
+}
+
+FAMILY_OWNER_DEFAULTS = {
+    "GOV-TRACE": "Requirements Manager",
+    "CM-CHANGE": "Configuration Manager",
+    "APPSEC-SDLC": "Application Security Lead",
+    "SUPPLY-CHAIN": "Software Supply Chain Lead",
+    "BUILD-CI": "DevOps Platform Owner",
+    "QA-VERIFICATION": "QA/Test Manager",
+    "IAM-ACCESS": "IAM Lead",
+    "CRYPTO-SECRETS": "Security Engineering / PKI Owner",
+    "VULN-MGMT": "Vulnerability Management Lead",
+    "GOV-ROLES": "Governance Board Secretariat",
+    "RISK-ACCEPTANCE": "Risk Manager",
+    "AUDIT-LOGGING": "Security Operations Lead",
+    "RELEASE-DEPLOY": "Release Manager",
+    "UNMAPPED": "Control Owner (TBD)",
+}
+
+OWNER_ROLE_RULES = [
+    ("CISO", ["ciso", "chief information security officer"]),
+    ("Governance Board", ["board", "governance committee", "steering committee"]),
+    ("Security Operations Lead", ["soc", "security operations"]),
+    ("Application Security Lead", ["appsec", "secure coding"]),
+    ("DevOps Platform Owner", ["devops", "platform team", "pipeline owner"]),
+    ("QA/Test Manager", ["quality assurance", "qa team", "test manager"]),
+    ("IAM Lead", ["identity team", "access management", "rbac", "mfa"]),
+    ("Configuration Manager", ["change control board", "ccb", "configuration management"]),
+    ("Release Manager", ["release manager", "deployment manager"]),
+    ("Risk Manager", ["risk owner", "risk committee", "waiver"]),
+]
+
+CLASSIFICATION_KEYWORDS = {
+    "Policy": [
+        "policy", "standard", "baseline", "mandatory", "prohibited", "forbidden", "must", "shall", "shall not",
+        "must not", "is required", "are required", "without exception", "governance",
+    ],
+    "Control": [
+        "implement", "enforce", "verify", "monitor", "scan", "review", "approve", "audit", "log", "retain",
+        "encrypt", "sign", "authenticate", "authorize", "segregate", "rotate", "test", "measure", "detect",
+        "alert", "remediate", "block", "track", "ticket", "attestation",
+    ],
+    "Guidance": [
+        "should", "may", "recommended", "guidance", "consider", "where feasible", "best practice", "can be",
+        "typically", "advisory", "example",
+    ],
+}
+
+CONTROL_FAMILY_KEYWORDS = [
+    ("IAM-ACCESS", ["rbac", "mfa", "identity", "access", "privilege", "authentication", "authorization"]),
+    ("CRYPTO-SECRETS", ["secret", "key", "certificate", "token", "vault", "kms", "hsm"]),
+    ("VULN-MGMT", ["vulnerability", "cve", "patch", "remediation", "severity", "triage", "scanner"]),
+    ("APPSEC-SDLC", ["sast", "dast", "secure coding", "code review", "threat model", "owasp"]),
+    ("SUPPLY-CHAIN", ["sbom", "provenance", "dependency", "third-party", "component", "artifact signature"]),
+    ("BUILD-CI", ["build", "pipeline", "reproducible", "ci", "compile"]),
+    ("AUDIT-LOGGING", ["log", "logging", "audit trail", "monitor", "siem", "retention"]),
+    ("CM-CHANGE", ["change", "branch", "commit", "merge", "repository", "version control"]),
+    ("QA-VERIFICATION", ["test", "verification", "validation", "coverage", "unit test", "integration test"]),
+    ("RELEASE-DEPLOY", ["release", "deployment", "promotion", "production", "rollout"]),
+    ("RISK-ACCEPTANCE", ["waiver", "exception", "deviation", "dispensation", "risk acceptance"]),
+    ("GOV-ROLES", ["responsible", "accountable", "owner", "authority", "board"]),
+    ("GOV-TRACE", ["traceability", "trace", "artifact lineage", "requirement id"]),
+]
+
+EVIDENCE_KEYWORDS = [
+    (["audit", "log", "monitor", "siem", "retention"], ["Audit log export", "SIEM report", "Retention configuration"]),
+    (["approve", "review", "change", "ticket"], ["Approval record", "Change ticket", "Reviewer sign-off"]),
+    (["test", "verification", "validation", "coverage"], ["Test report", "Coverage report", "Verification checklist"]),
+    (["vulnerability", "cve", "scan", "patch"], ["Vulnerability scan report", "Patch record", "Remediation ticket"]),
+    (["sbom", "provenance", "dependency"], ["SBOM export", "Provenance attestation", "Dependency review report"]),
+    (["secret", "key", "certificate", "token"], ["Secrets inventory", "Key rotation log", "Certificate lifecycle record"]),
+    (["identity", "access", "rbac", "mfa", "privilege"], ["Access review record", "IAM policy export", "MFA enforcement evidence"]),
+    (["release", "deploy", "production", "promotion"], ["Release checklist", "Deployment approval", "Rollback test evidence"]),
+]
+
+FAMILY_EVIDENCE_DEFAULTS = {
+    "IAM-ACCESS": ["Access review record", "IAM policy export"],
+    "CRYPTO-SECRETS": ["Secrets inventory", "Key rotation log"],
+    "VULN-MGMT": ["Vulnerability scan report", "Remediation ticket"],
+    "APPSEC-SDLC": ["Static analysis report", "Secure code review record"],
+    "SUPPLY-CHAIN": ["SBOM export", "Provenance attestation"],
+    "BUILD-CI": ["Build log", "Pipeline configuration export"],
+    "AUDIT-LOGGING": ["Audit log export", "Monitoring dashboard snapshot"],
+    "CM-CHANGE": ["Change ticket", "Pull request approval"],
+    "QA-VERIFICATION": ["Test report", "Verification checklist"],
+    "RELEASE-DEPLOY": ["Release checklist", "Deployment approval"],
+    "RISK-ACCEPTANCE": ["Signed waiver", "Risk acceptance record"],
+    "GOV-ROLES": ["RACI matrix extract", "Governance meeting minutes"],
+    "GOV-TRACE": ["Traceability matrix", "Requirement lineage export"],
+    "UNMAPPED": ["Control execution evidence"],
+}
+
 HEADER_FILL = PatternFill("solid", fgColor="1F4E78")
 HEADER_FONT = Font(color="FFFFFF", bold=True)
 THIN = Side(style="thin", color="D9D9D9")
@@ -71,6 +178,10 @@ class RequirementRecord:
     document: str
     baseline_level: str
     requirement_class: str
+    class_confidence: str
+    control_family: str
+    owner_role: str
+    evidence_mapping: str
     modal: str
     xref_group_id: str
     xref_topic: str
@@ -101,6 +212,10 @@ class SourceExcerptRecord:
     source_sentence_extracted: str
     requirement_text: str
     requirement_class: str
+    class_confidence: str
+    control_family: str
+    owner_role: str
+    evidence_mapping: str
     modal: str
     xref_group_id: str
     source_doc_path: str
@@ -285,24 +400,121 @@ def detect_modal(sentence: str) -> Optional[str]:
     return None
 
 
-def classify_requirement(sentence: str, modal: str) -> str:
-    lowered = sentence.lower()
-    if any(x in lowered for x in ["evidence", "record shall be retained", "documented evidence"]):
-        return "Evidence"
-    if any(x in lowered for x in ["waiver", "exception", "deviation"]):
-        return "Deviation / waiver"
+def _contains_keyword(text: str, keyword: str) -> bool:
+    escaped = re.escape(keyword)
+    pattern = escaped
+    if keyword and keyword[0].isalnum():
+        pattern = r"\b" + pattern
+    if keyword and keyword[-1].isalnum():
+        pattern = pattern + r"\b"
+    return re.search(pattern, text, re.IGNORECASE) is not None
+
+
+def _has_any_keyword(text: str, keywords: List[str]) -> bool:
+    return any(_contains_keyword(text, keyword) for keyword in keywords)
+
+
+def _keyword_hits(text: str, keywords: List[str]) -> int:
+    hits = 0
+    for keyword in keywords:
+        if _contains_keyword(text, keyword):
+            hits += 1
+    return hits
+
+
+def _unique_join(values: List[str]) -> str:
+    seen = set()
+    ordered = []
+    for value in values:
+        if value not in seen:
+            ordered.append(value)
+            seen.add(value)
+    return "; ".join(ordered)
+
+
+def classify_requirement(sentence: str, modal: str, section_path: str) -> Tuple[str, str]:
+    context = normalize_space(f"{section_path} {sentence}")
+    scores = defaultdict(float)
+
+    scores["Policy"] += 1.4 * _keyword_hits(context, CLASSIFICATION_KEYWORDS["Policy"])
+    scores["Control"] += 1.6 * _keyword_hits(context, CLASSIFICATION_KEYWORDS["Control"])
+    scores["Guidance"] += 1.4 * _keyword_hits(context, CLASSIFICATION_KEYWORDS["Guidance"])
+
     if modal in {"SHALL", "MUST", "PROHIBITED"}:
-        return "Direct requirement"
-    return "Guidance"
+        scores["Policy"] += 2.0
+        scores["Control"] += 1.2
+    elif modal in {"SHOULD", "MAY"}:
+        scores["Guidance"] += 2.0
+        scores["Policy"] -= 0.5
+        scores["Control"] -= 0.3
+
+    if _has_any_keyword(context, ["verify", "monitor", "review", "approve", "scan", "test", "log", "retain"]):
+        scores["Control"] += 1.8
+
+    if _has_any_keyword(context, ["policy", "standard", "mandatory", "without exception"]):
+        scores["Policy"] += 1.5
+
+    ranked = sorted(
+        [("Policy", scores["Policy"]), ("Control", scores["Control"]), ("Guidance", scores["Guidance"])],
+        key=lambda x: x[1],
+        reverse=True,
+    )
+    best_label, best_score = ranked[0]
+    second_score = ranked[1][1]
+    margin = best_score - second_score
+
+    if margin >= 2.0:
+        confidence = "High"
+    elif margin >= 0.8:
+        confidence = "Medium"
+    else:
+        confidence = "Low"
+
+    return best_label, confidence
 
 
 def infer_topic(sentence: str) -> Tuple[str, str]:
-    lowered = sentence.lower()
     for topic, keywords in TOPIC_RULES:
-        if any(k in lowered for k in keywords):
+        if _has_any_keyword(sentence, keywords):
             xref_group_id = f"XREF-{TOPIC_RULES.index((topic, keywords)) + 1:03d}"
             return xref_group_id, topic
     return "XREF-999", "Unclassified"
+
+
+def infer_control_family(sentence: str, section_path: str, xref_topic: str) -> str:
+    topic_family = CONTROL_FAMILY_BY_TOPIC.get(xref_topic)
+    if topic_family and topic_family != "UNMAPPED":
+        return topic_family
+
+    context = normalize_space(f"{section_path} {sentence}")
+    for family, keywords in CONTROL_FAMILY_KEYWORDS:
+        if _has_any_keyword(context, keywords):
+            return family
+    return "UNMAPPED"
+
+
+def infer_owner_role(sentence: str, section_path: str, control_family: str) -> str:
+    context = normalize_space(f"{section_path} {sentence}")
+    for owner_role, keywords in OWNER_ROLE_RULES:
+        if _has_any_keyword(context, keywords):
+            return owner_role
+    return FAMILY_OWNER_DEFAULTS.get(control_family, "Control Owner (TBD)")
+
+
+def infer_evidence_mapping(sentence: str, requirement_class: str, control_family: str) -> str:
+    context = sentence
+    evidence_candidates: List[str] = []
+    for keywords, evidence_items in EVIDENCE_KEYWORDS:
+        if _has_any_keyword(context, keywords):
+            evidence_candidates.extend(evidence_items)
+
+    if not evidence_candidates:
+        evidence_candidates.extend(FAMILY_EVIDENCE_DEFAULTS.get(control_family, ["Control execution evidence"]))
+
+    if requirement_class == "Guidance":
+        evidence_candidates.append("Adoption decision record")
+
+    return _unique_join(evidence_candidates)
 
 
 def infer_doc_id(filename: str, used: set) -> str:
@@ -368,10 +580,13 @@ def extract_requirements_from_documents(paths: List[str]) -> Tuple[List[Requirem
 
                     xref_group_id, xref_topic = infer_topic(sent)
                     baseline_level = infer_baseline_level(sent + " " + item.get("section_1", ""))
-                    requirement_class = classify_requirement(sent, modal)
                     section_1 = item.get("section_1", "")
                     section_2 = item.get("section_2", "")
                     section_path = " > ".join([x for x in [section_1, section_2] if x])
+                    requirement_class, class_confidence = classify_requirement(sent, modal, section_path)
+                    control_family = infer_control_family(sent, section_path, xref_topic)
+                    owner_role = infer_owner_role(sent, section_path, control_family)
+                    evidence_mapping = infer_evidence_mapping(sent, requirement_class, control_family)
 
                     reqs.append(
                         RequirementRecord(
@@ -380,6 +595,10 @@ def extract_requirements_from_documents(paths: List[str]) -> Tuple[List[Requirem
                             document=document_name,
                             baseline_level=baseline_level,
                             requirement_class=requirement_class,
+                            class_confidence=class_confidence,
+                            control_family=control_family,
+                            owner_role=owner_role,
+                            evidence_mapping=evidence_mapping,
                             modal=modal,
                             xref_group_id=xref_group_id,
                             xref_topic=xref_topic,
@@ -391,7 +610,7 @@ def extract_requirements_from_documents(paths: List[str]) -> Tuple[List[Requirem
                             lead_text="",
                             requirement_text=sent,
                             source_sentence_original=sent,
-                            extraction_type="direct" if requirement_class == "Direct requirement" else "heuristic",
+                            extraction_type="direct" if modal in {"SHALL", "MUST", "PROHIBITED"} else "heuristic",
                             source_doc_path=path,
                         )
                     )
@@ -411,6 +630,10 @@ def extract_requirements_from_documents(paths: List[str]) -> Tuple[List[Requirem
                             source_sentence_extracted=sent,
                             requirement_text=sent,
                             requirement_class=requirement_class,
+                            class_confidence=class_confidence,
+                            control_family=control_family,
+                            owner_role=owner_role,
+                            evidence_mapping=evidence_mapping,
                             modal=modal,
                             xref_group_id=xref_group_id,
                             source_doc_path=path,
@@ -420,7 +643,7 @@ def extract_requirements_from_documents(paths: List[str]) -> Tuple[List[Requirem
                     if xref_group_id not in cross_map:
                         cross_map[xref_group_id] = {
                             "topic": xref_topic,
-                            "description": f"Auto-grouped requirements for topic '{xref_topic}'.",
+                            "description": f"Auto-grouped requirements for topic '{xref_topic}' with inferred control-family metadata.",
                             "requirement_ids": [],
                             "documents": set(),
                             "first_req_id": req_id,
@@ -496,6 +719,9 @@ def create_workbook(reqs: List[RequirementRecord], sources: List[SourceExcerptRe
     ws_src = wb.create_sheet("Source_Excerpts")
     ws_xref = wb.create_sheet("Cross_Reference_Map")
     ws_docs = wb.create_sheet("Documents")
+    class_counts = defaultdict(int)
+    for req in reqs:
+        class_counts[req.requirement_class] += 1
 
     # README
     readme_rows = [
@@ -503,13 +729,16 @@ def create_workbook(reqs: List[RequirementRecord], sources: List[SourceExcerptRe
         [],
         ["Purpose", "Consolidated extraction of requirements from selected Word documents."],
         ["How to use", "Use Requirements_Master as the primary filterable list. 'Source link' jumps to the extracted source excerpt. 'XREF link' jumps to the thematic cross-reference cluster. In Documents, the filename opens the original selected document."],
-        ["Scope", "This script extracts requirement-like statements heuristically using modal verbs such as SHALL, MUST, SHOULD, MAY, SHALL NOT, and MUST NOT."],
+        ["Scope", "This script extracts requirement-like statements heuristically using modal verbs such as SHALL, MUST, SHOULD, MAY, SHALL NOT, and MUST NOT. It additionally classifies each row as Policy/Control/Guidance and enriches owner/control-family/evidence metadata."],
         ["Important", "Automatic extraction is never legally or semantically complete. Review each row before using it for governance, compliance, or audit."],
         [],
         ["Summary"],
         ["Total extracted rows", len(reqs)],
         ["Unique source documents", len(docs)],
         ["Rows with SHALL / MUST / etc.", len(reqs)],
+        ["Rows classified as Policy", class_counts["Policy"]],
+        ["Rows classified as Control", class_counts["Control"]],
+        ["Rows classified as Guidance", class_counts["Guidance"]],
     ]
     for row in readme_rows:
         ws_readme.append(row)
@@ -522,34 +751,40 @@ def create_workbook(reqs: List[RequirementRecord], sources: List[SourceExcerptRe
 
     # Requirements_Master
     req_headers = [
-        "REQ_ID", "Doc_ID", "Document", "Baseline_Level", "Requirement_Class", "Modal", "XREF_Group_ID", "XREF_Topic",
-        "SRC_ID", "Source_Link", "XREF_Link", "Section_1", "Section_2", "Section_Path", "Source_Paragraph_No",
-        "Lead_Text", "Requirement_Text", "Source_Sentence_Original", "Extraction_Type"
+        "REQ_ID", "Doc_ID", "Document", "Baseline_Level", "Requirement_Class", "Class_Confidence", "Control_Family",
+        "Owner_Role", "Evidence_Mapping", "Modal", "XREF_Group_ID", "XREF_Topic", "SRC_ID", "Source_Link", "XREF_Link",
+        "Section_1", "Section_2", "Section_Path", "Source_Paragraph_No", "Lead_Text", "Requirement_Text",
+        "Source_Sentence_Original", "Extraction_Type"
     ]
     ws_req.append(req_headers)
+    req_col = {name: idx + 1 for idx, name in enumerate(req_headers)}
 
     req_row_by_id = {}
     for idx, r in enumerate(reqs, start=2):
         ws_req.append([
-            r.req_id, r.doc_id, r.document, r.baseline_level, r.requirement_class, r.modal, r.xref_group_id, r.xref_topic,
-            r.src_id, "Go to source", "Go to xref", r.section_1, r.section_2, r.section_path, r.source_paragraph_no,
-            r.lead_text, r.requirement_text, r.source_sentence_original, r.extraction_type
+            r.req_id, r.doc_id, r.document, r.baseline_level, r.requirement_class, r.class_confidence, r.control_family,
+            r.owner_role, r.evidence_mapping, r.modal, r.xref_group_id, r.xref_topic, r.src_id, "Go to source",
+            "Go to xref", r.section_1, r.section_2, r.section_path, r.source_paragraph_no, r.lead_text,
+            r.requirement_text, r.source_sentence_original, r.extraction_type
         ])
         req_row_by_id[r.req_id] = idx
 
     # Source_Excerpts
     src_headers = [
         "SRC_ID", "REQ_ID", "Doc_ID", "Document", "Source_Paragraph_No", "Section_1", "Section_2", "Section_Path",
-        "Lead_Text", "Source_Paragraph_Original", "Source_Sentence_Extracted", "Requirement_Text", "Requirement_Class",
-        "Modal", "XREF_Group_ID", "Requirement_Link", "Document_Link"
+        "Requirement_Class", "Class_Confidence", "Control_Family", "Owner_Role", "Evidence_Mapping", "Lead_Text",
+        "Source_Paragraph_Original", "Source_Sentence_Extracted", "Requirement_Text", "Modal", "XREF_Group_ID",
+        "Requirement_Link", "Document_Link"
     ]
     ws_src.append(src_headers)
+    src_col = {name: idx + 1 for idx, name in enumerate(src_headers)}
     src_row_by_id = {}
     for idx, s in enumerate(sources, start=2):
         ws_src.append([
             s.src_id, s.req_id, s.doc_id, s.document, s.source_paragraph_no, s.section_1, s.section_2, s.section_path,
-            s.lead_text, s.source_paragraph_original, s.source_sentence_extracted, s.requirement_text, s.requirement_class,
-            s.modal, s.xref_group_id, "Back to requirement", "Open document"
+            s.requirement_class, s.class_confidence, s.control_family, s.owner_role, s.evidence_mapping, s.lead_text,
+            s.source_paragraph_original, s.source_sentence_extracted, s.requirement_text, s.modal, s.xref_group_id,
+            "Back to requirement", "Open document"
         ])
         src_row_by_id[s.src_id] = idx
 
@@ -580,43 +815,44 @@ def create_workbook(reqs: List[RequirementRecord], sources: List[SourceExcerptRe
         add_table(ws, "A1", f"{get_column_letter(len(headers))}{ws.max_row}", f"T_{ws.title.replace('_', '')}")
 
     set_column_widths(ws_req, {
-        "A": 14, "B": 10, "C": 34, "D": 12, "E": 20, "F": 12, "G": 14, "H": 28,
-        "I": 14, "J": 14, "K": 14, "L": 24, "M": 24, "N": 36, "O": 18, "P": 18,
-        "Q": 70, "R": 70, "S": 16,
+        "A": 14, "B": 10, "C": 34, "D": 12, "E": 16, "F": 14, "G": 16, "H": 28, "I": 40,
+        "J": 10, "K": 14, "L": 28, "M": 14, "N": 14, "O": 14, "P": 24, "Q": 24, "R": 36,
+        "S": 18, "T": 18, "U": 70, "V": 70, "W": 16,
     })
     set_column_widths(ws_src, {
-        "A": 14, "B": 14, "C": 10, "D": 34, "E": 18, "F": 24, "G": 24, "H": 36,
-        "I": 18, "J": 90, "K": 70, "L": 70, "M": 20, "N": 12, "O": 14, "P": 18, "Q": 18,
+        "A": 14, "B": 14, "C": 10, "D": 34, "E": 18, "F": 24, "G": 24, "H": 36, "I": 16,
+        "J": 14, "K": 16, "L": 28, "M": 40, "N": 18, "O": 90, "P": 70, "Q": 70, "R": 12,
+        "S": 14, "T": 18, "U": 18,
     })
     set_column_widths(ws_xref, {"A": 14, "B": 28, "C": 50, "D": 18, "E": 70, "F": 18, "G": 14, "H": 20})
     set_column_widths(ws_docs, {"A": 10, "B": 34, "C": 42, "D": 18, "E": 54, "F": 14, "G": 20, "H": 90})
 
     # Hyperlinks
     for row in range(2, ws_req.max_row + 1):
-        src_id = ws_req[f"I{row}"].value
-        xref_id = ws_req[f"G{row}"].value
+        src_id = ws_req.cell(row=row, column=req_col["SRC_ID"]).value
+        xref_id = ws_req.cell(row=row, column=req_col["XREF_Group_ID"]).value
         if src_id in src_row_by_id:
-            c = ws_req[f"J{row}"]
+            c = ws_req.cell(row=row, column=req_col["Source_Link"])
             c.hyperlink = f"#Source_Excerpts!A{src_row_by_id[src_id]}"
             c.font = LINK_FONT
         if xref_id in xref_row_by_id:
-            c = ws_req[f"K{row}"]
+            c = ws_req.cell(row=row, column=req_col["XREF_Link"])
             c.hyperlink = f"#Cross_Reference_Map!A{xref_row_by_id[xref_id]}"
             c.font = LINK_FONT
 
     for row in range(2, ws_src.max_row + 1):
-        req_id = ws_src[f"B{row}"].value
+        req_id = ws_src.cell(row=row, column=src_col["REQ_ID"]).value
         if req_id in req_row_by_id:
-            c = ws_src[f"P{row}"]
+            c = ws_src.cell(row=row, column=src_col["Requirement_Link"])
             c.hyperlink = f"#Requirements_Master!A{req_row_by_id[req_id]}"
             c.font = LINK_FONT
         doc_path = None
-        src_id = ws_src[f"A{row}"].value
+        src_id = ws_src.cell(row=row, column=src_col["SRC_ID"]).value
         src_obj = next((s for s in sources if s.src_id == src_id), None)
         if src_obj:
             doc_path = src_obj.source_doc_path
         if doc_path:
-            c = ws_src[f"Q{row}"]
+            c = ws_src.cell(row=row, column=src_col["Document_Link"])
             c.hyperlink = doc_path
             c.font = LINK_FONT
 

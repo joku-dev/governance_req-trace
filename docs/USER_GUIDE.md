@@ -41,6 +41,13 @@ The workbook contains:
 - a document inventory sheet
 - a README sheet
 
+Each extracted requirement now includes:
+- `Requirement_Class` (`Policy`, `Control`, `Guidance`)
+- `Class_Confidence` (`High`, `Medium`, `Low`)
+- `Control_Family`
+- `Owner_Role`
+- `Evidence_Mapping`
+
 ## Platform and format note
 - `.docx` is supported on Windows, Linux, and macOS.
 - `.doc` is supported only on Windows with Microsoft Word installed.
