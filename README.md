@@ -1,9 +1,10 @@
 # DevSecOps Requirements Extractor
 
-Windows-compatible utility to extract requirement-like statements from selected Word documents and generate a structured Excel workbook with working hyperlinks.
+Cross-platform utility to extract requirement-like statements from selected Word documents and generate a structured Excel workbook with working hyperlinks.
 
 ## Features
 - Multi-file selection dialog for `.docx` and `.doc`
+- CLI mode for headless execution on Linux/macOS/CI
 - Heuristic extraction of requirements using modal verbs such as `SHALL`, `MUST`, `SHALL NOT`, `MUST NOT`, `SHOULD`, and `MAY`
 - Output workbook with the following sheets:
   - `README`
@@ -22,6 +23,7 @@ Windows-compatible utility to extract requirement-like statements from selected 
 ├── README.md
 ├── requirements.txt
 ├── run_extractor.bat
+├── run_extractor.sh
 ├── src/
 │   └── devsecops_requirements_extractor.py
 ├── docs/
@@ -34,36 +36,55 @@ Windows-compatible utility to extract requirement-like statements from selected 
 ```
 
 ## Prerequisites
-- Windows 10/11
 - Python 3.10+
-- Microsoft Word installed
+- Microsoft Word installed only if you need to parse legacy `.doc` files
+
+Platform support:
+- `.docx`: Windows, Linux, macOS
+- `.doc`: Windows only (requires Microsoft Word + `pywin32`)
 
 Install dependencies:
-```powershell
+```bash
 pip install -r requirements.txt
 ```
 
 ## Start
-### Option 1: PowerShell / CMD
+### Option 1: GUI
+Windows (PowerShell/CMD):
 ```powershell
 python src\devsecops_requirements_extractor.py
 ```
 
-### Option 2: Double-click under Windows
-Double-click:
+Linux/macOS (Terminal):
+```bash
+python3 src/devsecops_requirements_extractor.py
+```
+
+### Option 2: CLI with explicit files (recommended for Linux/macOS servers)
+```bash
+python3 src/devsecops_requirements_extractor.py ./docs/input1.docx ./docs/input2.docx -o ./output.xlsx
+```
+
+### Option 3: Launcher scripts
+Windows (double-click):
 ```text
 run_extractor.bat
 ```
 
+Linux/macOS:
+```bash
+./run_extractor.sh ./docs/input1.docx -o ./output.xlsx
+```
+
 ## What the tool does
 1. Opens a file picker to select Word source documents
-2. Reads document content via Word COM automation
+2. Reads `.docx` using `python-docx` (cross-platform) and `.doc` via Word COM (Windows only)
 3. Detects requirement-like statements heuristically
 4. Groups entries into cross-reference topics
 5. Generates an Excel workbook with internal links and source file links
 
 ## Limitations
-This is a first-pass extractor, not a fully semantic compliance parser. Every extracted requirement should be reviewed before governance, audit, or certification use.
+This is a first-pass extractor, not a fully semantic compliance parser. Every extracted requirement should be reviewed before governance, audit, or certification use. Legacy `.doc` files are not supported on Linux/macOS.
 
 ## Recommended next evolution
 - PDF support

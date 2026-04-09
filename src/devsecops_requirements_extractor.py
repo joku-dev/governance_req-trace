@@ -1,3 +1,4 @@
+import argparse
 import os
 import re
 import sys
@@ -23,6 +24,13 @@ try:
     HAS_WIN32 = True
 except Exception:
     HAS_WIN32 = False
+
+# Optional python-docx support (cross-platform .docx parsing)
+try:
+    from docx import Document as DocxDocument  # type: ignore
+    HAS_PYDOCX = True
+except Exception:
+    HAS_PYDOCX = False
 
 MODAL_PATTERNS = [
     ("PROHIBITED", re.compile(r"\b(SHALL\s+NOT|MUST\s+NOT|PROHIBITED|FORBIDDEN)\b", re.IGNORECASE)),
@@ -122,15 +130,8 @@ class CrossRefRecord:
 class WordReader:
     def __init__(self):
         self.app = None
-        if not HAS_WIN32:
-            raise RuntimeError(
-                "pywin32 is not installed. Install it with 'pip install pywin32'."
-            )
 
     def __enter__(self):
-        self.app = win32com.client.Dispatch("Word.Application")
-        self.app.Visible = False
-        self.app.DisplayAlerts = 0
         return self
 
     def __exit__(self, exc_type, exc, tb):
@@ -140,7 +141,74 @@ class WordReader:
         except Exception:
             pass
 
+    def _ensure_com_app(self):
+        if self.app is not None:
+            return
+        self.app = win32com.client.Dispatch("Word.Application")
+        self.app.Visible = False
+        self.app.DisplayAlerts = 0
+
     def read_document(self, path: str) -> List[Dict[str, str]]:
+        ext = os.path.splitext(path)[1].lower()
+        if ext == ".docx":
+            if HAS_PYDOCX:
+                return self._read_docx(path)
+            if HAS_WIN32:
+                self._ensure_com_app()
+                return self._read_with_com(path)
+            raise RuntimeError(
+                "Cannot read .docx on this system. Install dependency 'python-docx'."
+            )
+        if ext == ".doc":
+            if not HAS_WIN32:
+                raise RuntimeError(
+                    f"Cannot read legacy .doc file '{os.path.basename(path)}' on this platform. "
+                    "Use Windows with Microsoft Word installed, or convert the file to .docx."
+                )
+            self._ensure_com_app()
+            return self._read_with_com(path)
+        raise RuntimeError(
+            f"Unsupported input format '{ext}'. Supported formats are .docx (all platforms) and .doc (Windows + Word)."
+        )
+
+    def _read_docx(self, path: str) -> List[Dict[str, str]]:
+        doc = DocxDocument(path)
+        items = []
+        current_h1 = ""
+        current_h2 = ""
+        paragraph_no = 0
+
+        for para in doc.paragraphs:
+            raw = (para.text or "").replace("\x07", " ").strip()
+            if not raw:
+                continue
+            paragraph_no += 1
+            try:
+                style_name = str(para.style.name)
+            except Exception:
+                style_name = ""
+
+            normalized = normalize_space(raw)
+            if is_heading(style_name, normalized):
+                level = detect_heading_level(style_name, normalized)
+                if level == 1:
+                    current_h1 = normalized
+                    current_h2 = ""
+                elif level == 2:
+                    current_h2 = normalized
+                continue
+
+            items.append(
+                {
+                    "paragraph_no": paragraph_no,
+                    "text": normalized,
+                    "section_1": current_h1,
+                    "section_2": current_h2,
+                }
+            )
+        return items
+
+    def _read_with_com(self, path: str) -> List[Dict[str, str]]:
         doc = self.app.Documents.Open(path, ReadOnly=True)
         items = []
         current_h1 = ""
@@ -594,15 +662,43 @@ def choose_files_gui() -> Tuple[List[str], str]:
     return list(paths), out_path
 
 
+def parse_cli_args(argv: List[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Extract requirement-like statements from Word documents and generate an Excel workbook."
+        )
+    )
+    parser.add_argument(
+        "paths",
+        nargs="*",
+        help="Input Word files (.docx on all platforms, .doc only on Windows with Word).",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        dest="output",
+        help="Output .xlsx file path (default: ./devsecops_requirements_extraction_generated.xlsx).",
+    )
+    return parser.parse_args(argv[1:])
+
+
 def main(argv: List[str]) -> int:
     try:
-        if len(argv) > 1:
-            paths = [p for p in argv[1:] if os.path.isfile(p)]
+        args = parse_cli_args(argv)
+        if args.paths:
+            paths = [os.path.abspath(p) for p in args.paths if os.path.isfile(p)]
             if not paths:
                 print("No valid input files provided.")
                 return 2
-            out_path = os.path.join(os.getcwd(), "devsecops_requirements_extraction_generated.xlsx")
+            out_path = args.output or os.path.join(os.getcwd(), "devsecops_requirements_extraction_generated.xlsx")
         else:
+            if tk is None:
+                print(
+                    "No input files were provided and tkinter GUI is unavailable.\n"
+                    "Use CLI mode, e.g.:\n"
+                    "  python src/devsecops_requirements_extractor.py input1.docx input2.docx -o output.xlsx"
+                )
+                return 2
             paths, out_path = choose_files_gui()
             if not paths or not out_path:
                 print("Operation cancelled.")

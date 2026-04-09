@@ -1,14 +1,15 @@
 # Architecture
 
 ## Overview
-The tool follows a straightforward desktop batch-processing pattern:
+The tool follows a straightforward desktop/CLI batch-processing pattern:
 
 1. **User interaction layer**
-   - Windows file dialog for selecting source documents
-   - save dialog for choosing the target Excel workbook
+   - GUI file picker and save dialog (if tkinter is available)
+   - CLI argument mode for non-GUI environments
 
 2. **Document ingestion**
-   - Microsoft Word COM automation reads `.doc` and `.docx`
+   - `python-docx` parses `.docx` on all platforms
+   - Microsoft Word COM automation parses `.doc` and can also parse `.docx` on Windows
    - paragraphs are normalized into processable text units
 
 3. **Requirement extraction**
